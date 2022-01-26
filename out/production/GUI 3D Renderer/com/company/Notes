@@ -1,0 +1,117 @@
+3D RENDERER IN JAVA
+
+Points/Vertex - connected by edges
+
+Complex things in 3D is Projection - How we move between different coordinate systems
+    - Object Coordinates 3D(X,Y,Z)
+    - World Coordinates 3D(X,Y,Z)
+    - Screen Coordinates 2D(X,Y) + DEPTH
+    E.g: A Cube
+          - 8 Vertices all have different positions(Object coords, local coords),
+          and we need to put these int the correct position of the world (World Coords - Coords relative to the room)
+          - World coords are a transformation of the Object coords
+          - This then needs to be displayed on the window which is defined according to a viewer
+          the cube will therefore have an appropriate position on the screen (Screen Coords 3D to 2D Transformation
+          from a viewpoint/camera)
+
+
+    - 3D Transformations (See PDF) - We use 4x4 matrices because we will combine the transformations together.
+        -Translation
+            uses a 4X4 Matrix(with transformation values in 4th columns) and a 4X1 Matrix(Original Position)
+            to result in a 4X1 Matrix of our result from which we can remove the bottom 1.
+        -Rotation
+            3 different matrices for the x, y and z axis a 3X3 Matrix made into a 4X4 one so it can be combines with translation
+        -Scaling
+            3 different matrices for the x, y and z axis a 3X3 Matrix made into a 4X4 one so it can be combines with translation
+
+    - 2D Projection (Perspective and Orthographic) To Draw 3D Image onto a 2D Screen
+        - Perspective Projection
+            - Have a loaction/eye, and we draw out a viewing volume, this defines a view plane (same distance down each
+            line of viewing volume) the distance is called a clip plane.
+            - There is a near clip plane and a far clip plane and stuff beyond the far clip plane can be omitted from drawing
+            this saves resources
+            - Our Object stays in the view plane
+            -we take all the points of the 3D object and project it onto the view plane and render it(draw it in 2D)
+
+            -(transformation) X (3d coords) = (projected 2D coords and their depth)
+
+
+
+    - Describe a 3D Object
+        -Vertexes
+        - Faces
+    - Matrix and Transformation code
+
+    - Rendering
+        -Points, then Wireframe, then Flat Colors, then lighting
+
+
+
+    - Put together a JAVA MATRIX and VECTOR CLASS to hold a 4X4 MATRIX(2D ARR)
+    - MulITPLY 2 MATRICIES
+    - Multiply matrix and vectors
+    - wRITE CODE FOR tRANSLATIOn, ROTATION, SCALING AND PROJECTION
+
+
+//understood
+angle for rotating cube around the y axis
+
+        /** EDIT added timer for redraw, also updates angle every frame **/
+        java.util.Timer timer = new java.util.Timer();
+        timer.scheduleAtFixedRate(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                angle += 1;
+                canvas.repaint();
+            }
+        }, 0, 33);
+
+
+
+//FILLING TRIANGLES
+//Any polygon can be split into triangles
+//Triangles are complex because there are many types of triangles
+//these can grow and shrink in size
+//we use scan lines with a start and end point
+
+1) order verticies of the triangle according to y coordinate
+2) by calculaitng dx/dy of the edge
+3) step line by line
+    - work out beginiing and end x values of thay y coordiinate row
+    - fill in the row
+
+
+
+next section
+//once faces are filled in
+//i will find triangles are drawn in the wrong order
+//back of cube will be drawn in front of front of cube
+
+//depth sorting is required, when i do projection, i need to sort triangles by the z coordinate created. further coords are displayed/drawn first and
+closer triangles drawn last
+
+//create triangle class to store x and y coords of each corner points
+//depth of triangle(average of 3 verticies)
+//color
+
+//painters algorithm
+
+
+
+dot product lighting
+1) for every face(for a cube the square) we calculate its 3d (unit vector) normal (using the cross product)
+2) vector to tell us where the light source is - we identify the direction of the lighting
+3) dotP between result of 1) and 2)
+4) value between -1 and 1, clamp this to 0 and 1
+5) multiply all color values by the dotP to change the color accoridngly
+
+store normals at the beginning and rotate these according to the model view matrix(world space not mvp(screen space))
+
+triangle fill routines
+mv and norms lists for lighting line 112
+when gradient == 0 an extra line is drawn
+
+
+
+
+
